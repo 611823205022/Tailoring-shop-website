@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Analytics | Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="logo">
+            <div class="logo-icon">📊</div>
+            <div class="logo-text">
+                <h1>E-Commerce</h1>
+                <span>Analytics Suite</span>
+            </div>
+        </div>
+        <nav>
+            <a href="#" class="nav-item active" data-page="executive">
+                <span class="nav-icon">📈</span> Executive
+            </a>
+            <a href="#" class="nav-item" data-page="products">
+                <span class="nav-icon">🛍️</span> Products
+            </a>
+            <a href="#" class="nav-item" data-page="customers">
+                <span class="nav-icon">👥</span> Customers
+            </a>
+            <a href="#" class="nav-item" data-page="profit">
+                <span class="nav-icon">💰</span> Profit
+            </a>
+            <a href="#" class="nav-item" data-page="delivery">
+                <span class="nav-icon">🚚</span> Delivery
+            </a>
+            <a href="#" class="nav-item" data-page="discounts">
+                <span class="nav-icon">🏷️</span> Discounts
+            </a>
+            <div class="nav-divider"></div>
+            <a href="#" class="nav-item" data-page="ai-chat">
+                <span class="nav-icon">🤖</span> AI Analyst
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="status-dot"></div>
+            <span>Connected to SQL Database</span>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <div class="page-title-container">
+                <h2 id="pageTitle">Executive Dashboard</h2>
+                <p id="pageSubtitle">Overview of business performance</p>
+            </div>
+            <div class="topbar-right">
+                <span class="data-range" id="dataRange">📅 Jan 2024 - Dec 2025</span>
+                <div class="avatar">AS</div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <!-- ===== EXECUTIVE DASHBOARD ===== -->
+            <section id="page-executive" class="page active">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total Revenue</span><span class="kpi-icon">💵</span></div>
+                        <div class="kpi-value" id="kpi-revenue">—</div>
+                        <div class="kpi-trend">Net of discounts & returns</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total Profit</span><span class="kpi-icon">💰</span></div>
+                        <div class="kpi-value" id="kpi-profit">—</div>
+                        <div class="kpi-trend" id="kpi-margin">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total Orders</span><span class="kpi-icon">📦</span></div>
+                        <div class="kpi-value" id="kpi-orders">—</div>
+                        <div class="kpi-trend" id="kpi-customers">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Avg Order Value</span><span class="kpi-icon">🛒</span></div>
+                        <div class="kpi-value" id="kpi-aov">—</div>
+                        <div class="kpi-trend" id="kpi-return-rate">—</div>
+                    </div>
+                </div>
+
+                <div class="chart-row">
+                    <div class="card chart-card wide">
+                        <div class="card-header">
+                            <h3>Sales Trend</h3>
+                            <span>Monthly Revenue</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-trend"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-row">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Top Products</h3>
+                            <span>By Revenue</span>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Revenue</th>
+                                        <th>Units</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-products-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>Category Performance</h3>
+                            <span>Revenue Share</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-categories"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PRODUCTS ===== -->
+            <section id="page-products" class="page">
+                <div class="filter-row">
+                    <input type="text" id="product-search" class="search-input" placeholder="Search products...">
+                    <select id="category-filter" class="filter-select">
+                        <option value="">All Categories</option>
+                    </select>
+                    <select id="performance-filter" class="filter-select">
+                        <option value="">All Performance</option>
+                        <option>Best Seller</option>
+                        <option>Most Profitable</option>
+                        <option>High Sales / Low Profit</option>
+                        <option>Regular</option>
+                    </select>
+                </div>
+                <div class="cards-row">
+                    <div class="mini-card">
+                        <div class="mini-value" id="mini-total-products">—</div>
+                        <div class="mini-label">Total Products</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-value" id="mini-best-sellers">—</div>
+                        <div class="mini-label">Best Sellers</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-value" id="mini-profitable">—</div>
+                        <div class="mini-label">Most Profitable</div>
+                    </div>
+                    <div class="mini-card">
+                        <div class="mini-value" id="mini-hslp">—</div>
+                        <div class="mini-label">High Sales/Low Profit</div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">
+                        <h3>Product Performance</h3>
+                        <span>Click a product to view details</span>
+                    </div>
+                    <div class="table-container">
+                        <table id="products-table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Category</th>
+                                    <th>Units Sold</th>
+                                    <th>Revenue</th>
+                                    <th>Profit</th>
+                                    <th>Margin %</th>
+                                    <th>Return %</th>
+                                    <th>Performance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== CUSTOMERS ===== -->
+            <section id="page-customers" class="page">
+                <div class="chart-row">
+                    <div class="card chart-card wide">
+                        <div class="card-header">
+                            <h3>Customer Segments</h3>
+                            <span>RFM Analysis</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-segments"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Top Customers by Spending</h3>
+                        <span>Sorted by lifetime value</span>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>Location</th>
+                                    <th>Segment</th>
+                                    <th>Orders</th>
+                                    <th>Total Spent</th>
+                                    <th>AOV</th>
+                                    <th>Last Purchase</th>
+                                </tr>
+                            </thead>
+                            <tbody id="top-customers-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== PROFIT ===== -->
+            <section id="page-profit" class="page">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Gross Revenue</span><span class="kpi-icon">📥</span></div>
+                        <div class="kpi-value" id="kpi-gross-revenue">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Net Profit</span><span class="kpi-icon">💰</span></div>
+                        <div class="kpi-value" id="kpi-net-profit">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Total Cost</span><span class="kpi-icon">🏭</span></div>
+                        <div class="kpi-value" id="kpi-total-cost">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Discounts Given</span><span class="kpi-icon">🏷️</span></div>
+                        <div class="kpi-value" id="kpi-discounts">—</div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="card chart-card wide">
+                        <div class="card-header">
+                            <h3>Profit by Category</h3>
+                            <span>Revenue vs Cost vs Profit</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-profit"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>🔥 High Revenue + High Profit</h3>
+                            <span>Star categories</span>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>Category</th><th>Revenue</th><th>Profit</th><th>Margin</th></tr></thead>
+                                <tbody id="high-hp-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card chart-card">
+                        <div class="card-header">
+                            <h3>⚠️ High Revenue + Low Profit</h3>
+                            <span>Optimization opportunities</span>
+                        </div>
+                        <div class="table-container">
+                            <table>
+                                <thead><tr><th>Category</th><th>Revenue</th><th>Profit</th><th>Margin</th></tr></thead>
+                                <tbody id="high-lp-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DELIVERY ===== -->
+            <section id="page-delivery" class="page">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Avg Delivery Time</span><span class="kpi-icon">⏱️</span></div>
+                        <div class="kpi-value" id="kpi-avg-delivery">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>On-Time Delivery</span><span class="kpi-icon">✅</span></div>
+                        <div class="kpi-value" id="kpi-ontime">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Late Delivery</span><span class="kpi-icon">⚠️</span></div>
+                        <div class="kpi-value" id="kpi-late">—</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-header"><span>Cancellation</span><span class="kpi-icon">❌</span></div>
+                        <div class="kpi-value" id="kpi-cancel">—</div>
+                    </div>
+                </div>
+                <div class="chart-row">
+                    <div class="card chart-card wide">
+                        <div class="card-header">
+                            <h3>Courier Performance</h3>
+                            <span>On-time rate by courier</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="chart-courier"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Region-wise Delivery</h3>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Region</th><th>Orders</th><th>Avg Days</th><th>On-Time %</th></tr></thead>
+                            <tbody id="region-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== DISCOUNTS ===== -->
+            <section id="page-discounts" class="page">
+                <div class="card wide">
+                    <div class="card-header">
+                        <h3>Discount Impact on Business</h3>
+                        <span>Are discounts actually helping?</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="chart-discounts"></canvas>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:20px;">
+                    <div class="card-header">
+                        <h3>Discount Breakdown</h3>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead><tr><th>Discount %</th><th>Orders</th><th>Revenue</th><th>Profit</th><th>Margin %</th><th>Units</th></tr></thead>
+                            <tbody id="discounts-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== AI CHAT ===== -->
+            <section id="page-ai-chat" class="page">
+                <div class="chat-layout">
+                    <div class="chat-container">
+                        <div class="chat-header">
+                            <div class="chat-avatar">🤖</div>
+                            <div>
+                                <h3>E-Commerce AI Analyst</h3>
+                                <span class="chat-status">● Online | Data insights ready</span>
+                            </div>
+                        </div>
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-message ai">
+                                <div class="message-bubble">
+                                    <p>👋 Hi! I'm your AI Analytics Assistant.</p>
+                                    <p>Ask me anything about your business:</p>
+                                    <div class="message-suggestions">
+                                        <button class="suggest-btn" data-question="Who are our most valuable customers?">Who are our valuable customers?</button>
+                                        <button class="suggest-btn" data-question="Which category is most profitable?">Which category is most profitable?</button>
+                                        <button class="suggest-btn" data-question="Which products have high sales but low profit?">High sales, low profit products?</button>
+                                        <button class="suggest-btn" data-question="Give me recommendations to improve revenue">Recommendations to improve revenue</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Ask your data..." autocomplete="off">
+                            <button id="chat-send" class="send-btn">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script src="js/app.js"></script>
+    <script src="js/executive.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/customers.js"></script>
+    <script src="js/profit.js"></script>
+    <script src="js/delivery.js"></script>
+    <script src="js/discounts.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

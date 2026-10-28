@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <radialGradient id="bgDark" cx="50%" cy="38%" r="75%">
+      <stop offset="0%" stop-color="#3D2C2E"/>
+      <stop offset="55%" stop-color="#4A3638"/>
+      <stop offset="100%" stop-color="#2E2223"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F9D9DE"/>
+      <stop offset="35%" stop-color="#E8AEB7"/>
+      <stop offset="70%" stop-color="#DCD6F7"/>
+      <stop offset="100%" stop-color="#F6C6B8"/>
+    </linearGradient>
+    <linearGradient id="goldSoft" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C7788A" stop-opacity="0"/>
+      <stop offset="50%" stop-color="#E8AEB7" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#C7788A" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="250" cy="245" r="248" fill="url(#bgDark)"/>
+
+  <circle cx="250" cy="245" r="228" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
+  <circle cx="250" cy="245" r="218" fill="none" stroke="url(#goldGrad)" stroke-width="1" opacity="0.75"/>
+  <circle cx="250" cy="245" r="208" fill="none" stroke="url(#goldGrad)" stroke-width="0.8" stroke-dasharray="2 6" opacity="0.6"/>
+  <circle cx="250" cy="245" r="192" fill="none" stroke="url(#goldSoft)" stroke-width="1.4"/>
+
+  <!-- sparkle at top -->
+  <g transform="translate(250 120)">
+    <path d="M0 -16 L4 -4 L16 0 L4 4 L0 16 L-4 4 L-16 0 L-4 -4 Z" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- needle & thread -->
+  <g opacity="0.85">
+    <g transform="translate(168 118) rotate(28)">
+      <rect x="0" y="0" width="6" height="112" rx="3" fill="url(#goldGrad)"/>
+      <circle cx="3" cy="2" r="8" fill="none" stroke="url(#goldGrad)" stroke-width="2.5"/>
+      <path d="M 3 112 Q 8 150 46 156 Q 84 162 92 140 Q 100 118 132 122 Q 168 126 172 108"
+            fill="none" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="179" cy="104" r="4" fill="#F6C6B8"/>
+    </g>
+  </g>
+
+  <!-- monogram -->
+  <text x="250" y="238" font-family="Georgia, 'Times New Roman', serif" font-size="118" font-weight="bold"
+        fill="url(#goldGrad)" text-anchor="middle" letter-spacing="3">GF</text>
+
+  <line x1="168" y1="266" x2="332" y2="266" stroke="url(#goldSoft)" stroke-width="2"/>
+  <path d="M250 258 l10 10 -10 10 -10 -10 Z" fill="url(#goldGrad)"/>
+
+  <text x="250" y="300" font-family="Georgia, 'Times New Roman', serif" font-size="31" font-weight="bold"
+        fill="url(#goldGrad)" text-anchor="middle" letter-spacing="5">GO FRIENDS</text>
+
+  <text x="250" y="336" font-family="Verdana, Arial, sans-serif" font-size="14.5" letter-spacing="4"
+        fill="#F6C6B8" text-anchor="middle" opacity="0.95">TAILORING &amp; EMBROIDERY</text>
+
+  <line x1="195" y1="355" x2="305" y2="355" stroke="url(#goldSoft)" stroke-width="1.2"/>
+</svg>

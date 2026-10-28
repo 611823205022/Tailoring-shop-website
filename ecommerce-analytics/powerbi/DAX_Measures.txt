@@ -1,0 +1,282 @@
+# =====================================================
+#  Power BI DAX Measures - E-Commerce Analytics
+#  =====================================================
+#  How to use:
+#  1. Import CSVs or connect to SQL database in Power BI
+#  2. Create these measures in the model
+#  3. Use them in visuals, KPI cards, and tooltips
+
+-- =====================================================
+--  CORE MEASURES
+-- =====================================================
+
+-- Total Revenue (net of discounts)
+Total Revenue =
+SUMX(
+    'order_items',
+    RELATED('products'[price]) * 'order_items'[quantity] * (1 - 'order_items'[discount])
+)
+
+-- Gross Revenue (before discounts)
+Gross Revenue =
+SUMX(
+    'order_items',
+    RELATED('products'[price]) * 'order_items'[quantity]
+)
+
+-- Total Discount Given
+Total Discount =
+SUMX(
+    'order_items',
+    RELATED('products'[price]) * 'order_items'[quantity] * 'order_items'[discount]
+)
+
+-- Total Product Cost
+Total Product Cost =
+SUMX(
+    'order_items',
+    RELATED('products'[cost]) * 'order_items'[quantity]
+)
+
+-- Total Shipping Cost
+Total Shipping Cost =
+SUM('orders'[shipping_cost])
+
+-- Total Other Costs
+Total Other Costs =
+SUM('orders'[other_costs])
+
+-- Total Profit
+Total Profit =
+[Total Revenue] - [Total Product Cost] - [Total Shipping Cost] - [Total Other Costs]
+
+-- Profit Margin %
+Profit Margin % =
+DIVIDE([Total Profit], [Total Revenue], 0)
+
+-- Total Orders
+Total Orders =
+DISTINCTCOUNT('orders'[order_id])
+
+-- Total Customers
+Total Customers =
+DISTINCTCOUNT('orders'[customer_id])
+
+-- Average Order Value (AOV)
+AOV =
+DIVIDE([Total Revenue], [Total Orders], 0)
+
+-- Units Sold
+Units Sold =
+SUM('order_items'[quantity])
+
+-- =====================================================
+--  RETURNS MEASURES
+-- =====================================================
+
+-- Total Returns
+Total Returns =
+COUNTROWS('returns')
+
+-- Return Rate %
+Return Rate % =
+DIVIDE([Total Returns], [Total Orders], 0)
+
+-- Refund Amount
+Refund Amount =
+SUM('returns'[refund_amount])
+
+-- =====================================================
+--  DELIVERY MEASURES
+-- =====================================================
+
+-- Delivery Time (days)
+Delivery Time Days =
+DATEDIFF('delivery'[shipping_date], 'delivery'[delivery_date], DAY)
+
+-- Average Delivery Time
+Avg Delivery Time =
+AVERAGEX('delivery', DATEDIFF('delivery'[shipping_date], 'delivery'[delivery_date], DAY))
+
+-- On-Time Delivery %
+On-Time Delivery % =
+DIVIDE(
+    CALCULATE(COUNTROWS('delivery'), 'delivery'[delivery_status] = "On-Time"),
+    CALCULATE(COUNTROWS('delivery'), 'delivery'[delivery_status] = "On-Time" || 'delivery'[delivery_status] = "Late"),
+    0
+)
+
+-- Late Delivery %
+Late Delivery % =
+1 - [On-Time Delivery %]
+
+-- =====================================================
+--  CUSTOMER MEASURES
+-- =====================================================
+
+-- Customer Lifetime Value (LTV)
+Customer LTV =
+CALCULATE([Total Revenue], ALLEXCEPT('customers', 'customers'[customer_id]))
+
+-- Repeat Purchase Rate
+Repeat Purchase % =
+DIVIDE(
+    CALCULATE(DISTINCTCOUNT('orders'[customer_id]),
+        FILTER(ALL('orders'), CALCULATE(DISTINCTCOUNT('orders'[order_id])) > 1)),
+    [Total Customers],
+    0
+)
+
+-- Acquisition / Retention
+Customer Retention Rate =
+DIVIDE(
+    [Total Customers],
+    CALCULATE(DISTINCTCOUNT('customers'[customer_id]), ALL('customers')),
+    0
+)
+
+-- =====================================================
+--  TIME INTELLIGENCE
+-- =====================================================
+
+-- Revenue Previous Month
+Revenue Prev Month =
+CALCULATE([Total Revenue], PREVIOUSMONTH('orders'[order_date]))
+
+-- Revenue Growth %
+Revenue Growth % =
+DIVIDE([Total Revenue] - [Revenue Prev Month], [Revenue Prev Month], 0)
+
+-- Revenue YTD
+Revenue YTD =
+TOTALYTD([Total Revenue], 'orders'[order_date])
+
+-- Revenue YoY Growth
+Revenue YoY % =
+DIVIDE(
+    [Total Revenue] - CALCULATE([Total Revenue], SAMEPERIODLASTYEAR('orders'[order_date])),
+    CALCULATE([Total Revenue], SAMEPERIODLASTYEAR('orders'[order_date])),
+    0
+)
+
+-- Profit Quarter over Quarter
+Profit QoQ % =
+VAR CurrentQ = [Total Profit]
+VAR PrevQ = CALCULATE([Total Profit], PREVIOUSQUARTER('orders'[order_date]))
+RETURN DIVIDE(CurrentQ - PrevQ, PrevQ, 0)
+
+-- =====================================================
+--  PRODUCT / DISCOUNT MEASURES
+-- =====================================================
+
+-- Average Discount %
+Avg Discount % =
+AVERAGE('order_items'[discount])
+
+-- Discount Efficiency (profit per rupee of discount)
+Discount Efficiency =
+DIVIDE([Total Profit], [Total Discount], 0)
+
+-- Top Seller Flag  (use in a calculated column)
+Top Product Flag =
+IF(
+    CALCULATE([Total Revenue], ALL('products')) > 
+    PERCENTILEX.INC(ALL('products'[product_id]), CALCULATE([Total Revenue]), 0.75),
+    "Best Seller",
+    "Regular"
+)
+
+-- High Sales / Low Profit Flag (calculated column)
+High Sales Low Profit =
+IF(
+    [Total Revenue] > CALCULATE([Total Revenue], ALL('products')) * 0.2 &&
+    [Profit Margin %] < CALCULATE([Profit Margin %], ALL('products')),
+    "Investigate",
+    "OK"
+)
+
+-- =====================================================
+--  RFM SEGMENTATION (Calculated Columns on Customers)
+-- =====================================================
+
+-- Recency (days since last order)
+Recency =
+VAR LastDate = MAX('orders'[order_date])
+VAR RefDate = CALCULATE(MAX('orders'[order_date]), ALL('orders'))
+RETURN DATEDIFF(LastDate, RefDate, DAY)
+
+-- Frequency (number of orders per customer)
+Frequency =
+CALCULATE(DISTINCTCOUNT('orders'[order_id]))
+
+-- Monetary (total spend per customer)
+Monetary =
+CALCULATE([Total Revenue])
+
+-- RFM Score
+RFM Score =
+CONCATENATE(
+    CONCATENATE(
+        IF([Recency] <= 30, "4", IF([Recency] <= 90, "3", IF([Recency] <= 180, "2", "1"))),
+        IF([Frequency] >= 5, "4", IF([Frequency] >= 3, "3", IF([Frequency] >= 2, "2", "1")))
+    ),
+    IF([Monetary] >= 50000, "4", IF([Monetary] >= 20000, "3", IF([Monetary] >= 5000, "2", "1")))
+)
+
+-- Customer Segment (calculated column)
+Customer Segment =
+SWITCH(
+    TRUE(),
+    VALUE(LEFT([RFM Score], 1)) >= 3 && VALUE(MID([RFM Score], 2, 1)) >= 3,
+    "VIP",
+    VALUE(LEFT([RFM Score], 1)) >= 3,
+    "Loyal",
+    VALUE(MID([RFM Score], 2, 1)) >= 2,
+    "Potential",
+    VALUE(LEFT([RFM Score], 1)) <= 1,
+    "At Risk",
+    "Lost"
+)
+
+-- =====================================================
+--  POWER BI CONNECTIVITY
+-- =====================================================
+-- To connect Power BI directly to the SQLite database:
+--   Use "Get Data" -> "ODBC" or export tables to CSV.
+--
+-- Recommended table relationships:
+--   customers[customer_id] 1:N orders[customer_id]
+--   products[product_id]   1:N order_items[product_id]
+--   orders[order_id]       1:N order_items[order_id]
+--   orders[order_id]       1:1 delivery[order_id]
+--   orders[order_id]       1:N returns[order_id]
+
+-- =====================================================
+--  SAMPLE PAGES & VISUALS
+-- =====================================================
+-- Page 1: Executive Overview
+--   4 KPI cards: Total Revenue, Total Profit, Total Orders, AOV
+--   Line chart: Revenue & Profit over date
+--   Clustered column: Revenue by Category
+--   Table: Top 10 products by revenue
+--
+-- Page 2: Sales & Profit
+--   Slicer: Date range, Category
+--   Waterfall: Gross Revenue -> Discounts -> Costs -> Net Profit
+--   Matrix: Year x Category (Revenue, Profit, Margin)
+--
+-- Page 3: Product Analytics
+--   Slicer: Category
+--   Scatter: Units Sold vs Profit Margin (callout: margin)
+--   Table with conditional formatting on Margin %
+--
+-- Page 4: Customer Analytics
+--   Slicer: Segment
+--   Donut: Customer Segment distribution
+--   Table: Top customers (LTV, Frequency, Recency)
+--
+-- Page 5: Logistics & Returns
+--   Gauge: On-Time Delivery %
+--   Clustered bar: Courier performance
+--   Map: Region-wise orders and delivery time
+--   Table: Return reasons

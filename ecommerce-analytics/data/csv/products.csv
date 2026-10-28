@@ -1,0 +1,47 @@
+product_id,product_name,category,subcategory,price,cost,brand,rating
+1,Wireless Bluetooth Earbuds,Electronics,Audio,1299.0,650.0,boAt,4.2
+2,Smartphone Case - Silicone,Electronics,Accessories,399.0,80.0,Generic,4.0
+3,USB-C Fast Charging Cable,Electronics,Accessories,299.0,60.0,Ambrane,4.1
+4,Power Bank 10000mAh,Electronics,Power,899.0,420.0,Mi,4.3
+5,LED Desk Lamp,Electronics,Lighting,1199.0,500.0,Philips,4.4
+6,Portable Bluetooth Speaker,Electronics,Audio,1999.0,900.0,JBL,4.5
+7,Laptop Stand - Aluminum,Electronics,Accessories,1499.0,550.0,Zoook,4.2
+8,Webcam HD 1080p,Electronics,Accessories,2499.0,1100.0,Logitech,4.6
+9,Wireless Mouse,Electronics,Accessories,799.0,280.0,HP,4.1
+10,Mechanical Keyboard,Electronics,Accessories,3499.0,1500.0,Redgear,4.4
+11,Cotton Round Neck T-Shirt,Fashion,Men,599.0,180.0,Allen Solly,4.0
+12,Slim Fit Denim Jeans,Fashion,Men,1499.0,550.0,Levis,4.3
+13,Floral Print Kurti,Fashion,Women,899.0,280.0,FabIndia,4.2
+14,Ethnic Embroidered Suit Set,Fashion,Women,2499.0,900.0,Biba,4.5
+15,Running Sports Shoes,Fashion,Footwear,2999.0,1200.0,Nike,4.6
+16,Formal Leather Shoes,Fashion,Footwear,3499.0,1400.0,Clarks,4.4
+17,Casual Sneakers,Fashion,Footwear,1999.0,700.0,Puma,4.3
+18,Cotton Saree - Printed,Fashion,Women,1799.0,650.0,W,4.1
+19,Men's Polo T-Shirt,Fashion,Men,799.0,250.0,US Polo,4.0
+20,Women's Palazzo Pants,Fashion,Women,699.0,220.0,Zara,4.2
+21,Non-Stick Cookware Set,Home & Kitchen,Kitchen,2499.0,1000.0,Prestige,4.3
+22,Stainless Steel Water Bottle,Home & Kitchen,Kitchen,449.0,120.0,Milton,4.1
+23,Ceramic Coffee Mug Set (4),Home & Kitchen,Kitchen,699.0,220.0,Borosil,4.4
+24,Cotton Bedsheet King Size,Home & Kitchen,Bedroom,1299.0,450.0,Bombay Dyeing,4.5
+25,Memory Foam Pillow (2-Pack),Home & Kitchen,Bedroom,1599.0,550.0,Wakefit,4.6
+26,Robot Vacuum Cleaner,Home & Kitchen,Cleaning,14999.0,7500.0,iRobot,4.7
+27,Air Purifier with HEPA Filter,Home & Kitchen,Appliances,8999.0,4200.0,Dyson,4.5
+28,Table Fan - Rechargeable,Home & Kitchen,Applperiences,1999.0,750.0,Orient,4.2
+29,Mixer Grinder 750W,Home & Kitchen,Kitchen,3499.0,1500.0,Bajaj,4.4
+30,Electric Kettle 1.5L,Home & Kitchen,Kitchen,799.0,300.0,Prestige,4.3
+31,Vitamin C Face Serum,Beauty,Skincare,599.0,120.0,Mamaearth,4.3
+32,Natural Hair Oil - Coconut,Beauty,Haircare,349.0,80.0,Parachute,4.1
+33,Charcoal Face Mask (Pack of 5),Beauty,Skincare,449.0,100.0,Everyuth,4.0
+34,Perfume for Men - 100ml,Beauty,Fragrance,1299.0,400.0,Park Avenue,4.2
+35,Makeup Kit - 12 Colors,Beauty,Makeup,899.0,250.0,Lakme,4.4
+36,Sunscreen SPF 50,Beauty,Skincare,499.0,110.0,Neutrogena,4.5
+37,Shampoo - Anti Dandruff,Beauty,Haircare,299.0,70.0,Head & Shoulders,4.0
+38,Body Lotion - Moisturizing,Beauty,Skincare,399.0,90.0,Nivea,4.3
+39,Yoga Mat - 6mm,Sports,Fitness,799.0,280.0,Boldfit,4.2
+40,Resistance Bands Set,Sports,Fitness,499.0,120.0,Kobo,4.1
+41,Cricket Bat - Kashmir Willow,Sports,Cricket,1499.0,600.0,SS,4.4
+42,Football Size 5,Sports,Football,699.0,250.0,Nivia,4.3
+43,Dumbbells Pair 5kg,Sports,Fitness,999.0,400.0,Cosco,4.2
+44,Skipping Rope - Speed,Sports,Fitness,299.0,70.0,Boldfit,4.0
+45,Badminton Racket Set,Sports,Badminton,1299.0,500.0,Yonex,4.5
+46,Protein Powder 1kg,Sports,Nutrition,2499.0,1200.0,Optimum Nutrition,4.6

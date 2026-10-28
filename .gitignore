@@ -1,0 +1,8 @@
+/orders.json
+*.log
+*.err
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
