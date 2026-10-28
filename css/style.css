@@ -189,7 +189,9 @@ ul { list-style: none; }
 /* ===== Hero ===== */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: max(540px, 100vh);
+  min-height: max(540px, 100svh);
+  min-height: max(540px, var(--viewport-height, 100dvh));
   display: flex;
   align-items: center;
   color: var(--cream);
@@ -933,7 +935,7 @@ ul { list-style: none; }
   .section { padding: 84px 0; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .nav {
     position: fixed;
     top: 76px;
@@ -953,14 +955,19 @@ ul { list-style: none; }
   .nav.open { right: 0; }
   .nav-cta { width: 100%; }
   .nav-toggle { display: flex; }
+}
 
+@media (max-width: 768px) {
   .hero { min-height: 92vh; }
+  .hero { min-height: max(500px, calc(var(--viewport-height, 100dvh) * 0.92)); }
 
   .offer-slide span { font-size: 0.8rem; }
   .blessing { border-radius: 150px 150px 20px 20px; padding: 60px 26px 38px; }
   .blessing::before { border-radius: 138px 138px 12px 12px; }
   .blessing-wrap { padding: 72px 0; }
   .form-grid { grid-template-columns: 1fr; }
+  .section { padding: clamp(60px, 10vw, 84px) 0; }
+  .booking-form { padding: clamp(18px, 5vw, 34px); }
 }
 
 /* ===== Screen-reader only ===== */
@@ -1371,13 +1378,21 @@ ul { list-style: none; }
 }
 
 /* ===== Responsive for new blocks ===== */
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
+  .carousel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+  }
   .carousel-arrow { position: static; transform: none; }
-  .carousel { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .carousel-track { order: 2; width: 100%; }
+  .carousel-track { grid-column: 1 / -1; order: 2; width: 100%; min-width: 0; }
   .carousel-arrow.prev { order: 1; }
   .carousel-arrow.next { order: 3; }
   .carousel-arrow:hover { transform: none; }
+}
+@media (min-width: 1101px) and (max-width: 1280px) {
+  .carousel { margin-inline: 58px; }
 }
 @media (max-width: 900px) {
   .carousel-track .review-card { flex-basis: calc((100% - 26px) / 2); max-width: calc((100% - 26px) / 2); }
@@ -1388,4 +1403,10 @@ ul { list-style: none; }
   .price-table td, .price-table th { padding: 11px 12px; }
   .reminder-form input { flex: 1 1 45%; min-width: 0; }
   .wa-float { width: 50px; height: 50px; }
+}
+
+@media (max-width: 380px) {
+  .countdown-boxes { gap: 4px; }
+  .countdown-cell { min-width: 0; padding: 6px 8px; }
+  .btn { max-width: 100%; padding-inline: 20px; letter-spacing: 1px; }
 }

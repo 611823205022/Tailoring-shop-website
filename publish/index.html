@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>GO FRIENDS Tailoring | Traditional Blouse Stitching - Vengalapuram</title>
   <meta name="description" content="GO FRIENDS Tailoring Shop - Custom blouse stitching, tailoring and embroidery for women, girls and school girls in Vengalapuram, Tirupathur. Call 9751590453. Order online and view prices." />
   <meta name="keywords" content="tailoring shop Vengalapuram, blouse stitching Vengalapuram, tailor near me Tirupathur, pattu pavadai, school uniform stitching, maggam work, GO FRIENDS tailoring" />
@@ -228,7 +228,9 @@ ul { list-style: none; }
 /* ===== Hero ===== */
 .hero {
   position: relative;
-  min-height: 100vh;
+  min-height: max(540px, 100vh);
+  min-height: max(540px, 100svh);
+  min-height: max(540px, var(--viewport-height, 100dvh));
   display: flex;
   align-items: center;
   color: var(--cream);
@@ -972,7 +974,7 @@ ul { list-style: none; }
   .section { padding: 84px 0; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .nav {
     position: fixed;
     top: 76px;
@@ -992,14 +994,19 @@ ul { list-style: none; }
   .nav.open { right: 0; }
   .nav-cta { width: 100%; }
   .nav-toggle { display: flex; }
+}
 
+@media (max-width: 768px) {
   .hero { min-height: 92vh; }
+  .hero { min-height: max(500px, calc(var(--viewport-height, 100dvh) * 0.92)); }
 
   .offer-slide span { font-size: 0.8rem; }
   .blessing { border-radius: 150px 150px 20px 20px; padding: 60px 26px 38px; }
   .blessing::before { border-radius: 138px 138px 12px 12px; }
   .blessing-wrap { padding: 72px 0; }
   .form-grid { grid-template-columns: 1fr; }
+  .section { padding: clamp(60px, 10vw, 84px) 0; }
+  .booking-form { padding: clamp(18px, 5vw, 34px); }
 }
 
 /* ===== Screen-reader only ===== */
@@ -1410,13 +1417,21 @@ ul { list-style: none; }
 }
 
 /* ===== Responsive for new blocks ===== */
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
+  .carousel {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 10px;
+  }
   .carousel-arrow { position: static; transform: none; }
-  .carousel { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-  .carousel-track { order: 2; width: 100%; }
+  .carousel-track { grid-column: 1 / -1; order: 2; width: 100%; min-width: 0; }
   .carousel-arrow.prev { order: 1; }
   .carousel-arrow.next { order: 3; }
   .carousel-arrow:hover { transform: none; }
+}
+@media (min-width: 1101px) and (max-width: 1280px) {
+  .carousel { margin-inline: 58px; }
 }
 @media (max-width: 900px) {
   .carousel-track .review-card { flex-basis: calc((100% - 26px) / 2); max-width: calc((100% - 26px) / 2); }
@@ -1427,6 +1442,12 @@ ul { list-style: none; }
   .price-table td, .price-table th { padding: 11px 12px; }
   .reminder-form input { flex: 1 1 45%; min-width: 0; }
   .wa-float { width: 50px; height: 50px; }
+}
+
+@media (max-width: 380px) {
+  .countdown-boxes { gap: 4px; }
+  .countdown-cell { min-width: 0; padding: 6px 8px; }
+  .btn { max-width: 100%; padding-inline: 20px; letter-spacing: 1px; }
 }
 
 </style>
@@ -3515,6 +3536,30 @@ window.GFStore = (function () {
 (function () {
   "use strict";
 
+  var viewportFrame = 0;
+
+  function updateViewportMetrics() {
+    if (viewportFrame) return;
+    viewportFrame = window.requestAnimationFrame(function () {
+      viewportFrame = 0;
+      var viewport = window.visualViewport;
+      var width = viewport ? viewport.width : document.documentElement.clientWidth;
+      var height = viewport ? viewport.height : window.innerHeight;
+      var root = document.documentElement;
+
+      root.style.setProperty("--viewport-height", Math.round(height) + "px");
+      root.dataset.viewportWidth = Math.round(width);
+      root.dataset.viewportHeight = Math.round(height);
+    });
+  }
+
+  window.addEventListener("resize", updateViewportMetrics, { passive: true });
+  window.addEventListener("orientationchange", updateViewportMetrics, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", updateViewportMetrics, { passive: true });
+  }
+  updateViewportMetrics();
+
   var header = document.getElementById("header");
   var navToggle = document.getElementById("navToggle");
   var nav = document.getElementById("nav");
@@ -3539,6 +3584,7 @@ window.GFStore = (function () {
     link.addEventListener("click", function () {
       nav.classList.remove("open");
       navToggle.classList.remove("open");
+      navToggle.setAttribute("aria-label", "Open menu");
     });
   });
 

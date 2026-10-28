@@ -1,6 +1,30 @@
 (function () {
   "use strict";
 
+  var viewportFrame = 0;
+
+  function updateViewportMetrics() {
+    if (viewportFrame) return;
+    viewportFrame = window.requestAnimationFrame(function () {
+      viewportFrame = 0;
+      var viewport = window.visualViewport;
+      var width = viewport ? viewport.width : document.documentElement.clientWidth;
+      var height = viewport ? viewport.height : window.innerHeight;
+      var root = document.documentElement;
+
+      root.style.setProperty("--viewport-height", Math.round(height) + "px");
+      root.dataset.viewportWidth = Math.round(width);
+      root.dataset.viewportHeight = Math.round(height);
+    });
+  }
+
+  window.addEventListener("resize", updateViewportMetrics, { passive: true });
+  window.addEventListener("orientationchange", updateViewportMetrics, { passive: true });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", updateViewportMetrics, { passive: true });
+  }
+  updateViewportMetrics();
+
   var header = document.getElementById("header");
   var navToggle = document.getElementById("navToggle");
   var nav = document.getElementById("nav");
@@ -25,6 +49,7 @@
     link.addEventListener("click", function () {
       nav.classList.remove("open");
       navToggle.classList.remove("open");
+      navToggle.setAttribute("aria-label", "Open menu");
     });
   });
 
